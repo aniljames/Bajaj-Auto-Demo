@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bajaj | Engineering Tomorrow</title>
+    <style>
+        :root {
+            --primary-blue: #00529b;
+            --dark-bg: #0a0a0a;
+            --text-light: #f4f4f4;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- SMOOTH VIDEO HERO SECTION --- */
+        #video-scroll-container {
+            height: 600vh; /* Increased for slower, smoother playback */
+            position: relative;
+        }
+
+        .sticky-wrapper {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #scroll-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 80%;
+        }
+
+        .hero-overlay h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            margin: 0;
+            line-height: 0.9;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- BAJAJ CONTENT SECTIONS --- */
+        .content-section {
+            padding: 100px 10%;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            background: var(--dark-bg);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .section-tag {
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #aaa;
+            font-size: 1.1rem;
+        }
+
+        .feature-card {
+            background: #151515;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #222;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <section id="video-scroll-container">
+        <div class="sticky-wrapper">
+            <video id="scroll-video" preload="auto" muted playsinline>
+                <source src="C:\Users\Anil James\Downloads\Man_riding_Bajaj_202604041722.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay">
+                <p class="section-tag">The World's Favorite Indian</p>
+                <h1>EVOLUTION</h1>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="grid">
+            <div>
+                <span class="section-tag">Heritage</span>
+                <h2>The Iconic Bajaj Super</h2>
+                <p>From the streets of Pune to the heart of every Indian household, the Bajaj Super wasn't just a scooter; it was a revolution on two wheels. We've taken that DNA of reliability and forged it into the future of electric mobility.</p>
+            </div>
+            <div class="feature-card">
+                <h3>75+ Years</h3>
+                <p>Of engineering excellence and trust across 70+ countries.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="background: #0f0f0f;">
+        <div class="grid">
+            <div class="feature-card">
+                <h3 style="color: var(--primary-blue);">Chetak Electric</h3>
+                <p>IP67 rated, seamless design, and the silent power of a 4000W motor.</p>
+            </div>
+            <div>
+                <span class="section-tag">Innovation</span>
+                <h2>Redefining the Ride</h2>
+                <p>Whether it's the raw aggression of the Pulsar or the refined elegance of the new Chetak, our focus remains on precision. Performance isn't just about speed; it's about the feeling of the road.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const video = document.getElementById("scroll-video");
+        const container = document.getElementById("video-scroll-container");
+        
+        let targetTime = 0;
+        let currentTime = 0;
+        const accelAmount = 0.1; // Lower = smoother, higher = more responsive
+
+        window.addEventListener("scroll", () => {
+            const distance = window.scrollY;
+            const totalHeight = container.offsetHeight - window.innerHeight;
+            const percentage = Math.max(0, Math.min(distance / totalHeight, 1));
+            
+            if (video.duration) {
+                targetTime = video.duration * percentage;
+            }
+        });
+
+        // The Smoothing Loop
+        function render() {
+            // Linear Interpolation (Lerp) formula: current + (target - current) * factor
+            currentTime += (targetTime - currentTime) * accelAmount;
+            
+            // Only update if the difference is significant to save battery
+            if (Math.abs(currentTime - targetTime) > 0.001) {
+                video.currentTime = currentTime;
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        video.addEventListener('loadedmetadata', () => {
+            requestAnimationFrame(render);
+        });
+    </script>
+</body>
+</html>
